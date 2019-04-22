@@ -1,0 +1,16 @@
+[package]
+name = "ml-macros"
+version = "0.1.0"
+authors = ["Elie Génard <elie.genard@laposte.net>"]
+edition = "2018"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "0.4.27"
+
+# Reminder: add 'extra-traits' feature for Debug derive
+syn = { version = "0.15.32", features = ["full"] }
+
+quote = "0.6"
