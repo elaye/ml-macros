@@ -23,12 +23,18 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
         .map(|f| f.ident.clone().unwrap())
         .collect();
 
+    let nb_features = feature_fields_idents.len();
+
     let output = quote! {
         impl #name {
             pub fn to_vec(&self) -> Vec<f32> {
                 vec![
                     #(self.#feature_fields_idents,)*
                 ]
+            }
+
+            pub fn nb_features() -> usize {
+                #nb_features
             }
         }
     };
