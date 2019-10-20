@@ -27,6 +27,9 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
         .map(Ident::to_string)
         .collect();
 
+    let feature_fields_names0 = &feature_fields_names;
+    let feature_fields_names1 = &feature_fields_names;
+
     let feature_fields_idents0 = &feature_fields_idents;
     let feature_fields_idents1 = &feature_fields_idents;
 
@@ -43,11 +46,17 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
             pub fn to_vec_without(&self, fields: &[&str]) -> Vec<f32> {
                 let mut vec = Vec::new();
 
-                #(if !fields.contains(&#feature_fields_names) {
+                #(if !fields.contains(&#feature_fields_names0) {
                     vec.push(self.#feature_fields_idents1);
                 })*
 
                 vec
+            }
+
+            pub fn names() -> Vec<&'static str> {
+                vec![
+                    #(#feature_fields_names1),*
+                ]
             }
 
             pub fn nb_features() -> usize {

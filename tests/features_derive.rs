@@ -35,4 +35,9 @@ mod test {
         assert_eq!(s.to_vec_without(&["bar", "foo"]), vec![]);
         assert_eq!(s.to_vec_without(&["bar"]), vec![43.32]);
     }
+
+    #[test]
+    fn names() {
+        assert_eq!(Test::names(), vec!["foo", "bar"]);
+    }
 }
