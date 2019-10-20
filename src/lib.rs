@@ -59,7 +59,7 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
                 ]
             }
 
-            pub fn nb_features() -> usize {
+            pub const fn nb_features() -> usize {
                 #nb_features
             }
         }
