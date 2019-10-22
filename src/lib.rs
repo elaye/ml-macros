@@ -4,8 +4,18 @@ extern crate syn;
 
 use proc_macro::{TokenStream};
 use proc_macro2::Span;
-use quote::quote;
-use syn::{parse_macro_input, ItemStruct, Field, Ident, Meta};
+use quote::{
+    quote,
+    format_ident,
+};
+use syn::{
+    parse_macro_input,
+    ItemStruct,
+    ItemEnum,
+    Field,
+    Ident,
+    Meta,
+};
 
 const NO_FEATURE_IDENT: &'static str = "no_feature";
 
@@ -27,27 +37,21 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
         .map(Ident::to_string)
         .collect();
 
-    let feature_fields_names0 = &feature_fields_names;
-    let feature_fields_names1 = &feature_fields_names;
-
-    let feature_fields_idents0 = &feature_fields_idents;
-    let feature_fields_idents1 = &feature_fields_idents;
-
     let nb_features = feature_fields_idents.len();
 
     let output = quote! {
         impl #name {
             pub fn to_vec(&self) -> Vec<f32> {
                 vec![
-                    #(self.#feature_fields_idents0),*
+                    #(self.#feature_fields_idents),*
                 ]
             }
 
             pub fn to_vec_without(&self, fields: &[&str]) -> Vec<f32> {
                 let mut vec = Vec::new();
 
-                #(if !fields.contains(&#feature_fields_names0) {
-                    vec.push(self.#feature_fields_idents1);
+                #(if !fields.contains(&#feature_fields_names) {
+                    vec.push(self.#feature_fields_idents);
                 })*
 
                 vec
@@ -55,7 +59,7 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
 
             pub fn names() -> Vec<&'static str> {
                 vec![
-                    #(#feature_fields_names1),*
+                    #(#feature_fields_names),*
                 ]
             }
 
@@ -68,13 +72,14 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
     TokenStream::from(output)
 }
 
-// FIXME: find out why 'field_ignore_attr_ident' is considered unused
-#[allow(unused_variables)]
 fn ignored_field(field: &Field, field_ignore_attr_ident: &Ident) -> bool {
     field.attrs.iter().all(|attr| {
         match attr.parse_meta() {
-            Ok(Meta::Word(field_ignore_attr_ident)) => {
-                false
+            Ok(Meta::Path(path)) => {
+                match path.get_ident() {
+                    Some(ident) => ident == field_ignore_attr_ident,
+                    None => false
+                }
             },
             _ => true
         }

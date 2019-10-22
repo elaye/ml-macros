@@ -8,9 +8,9 @@ edition = "2018"
 proc-macro = true
 
 [dependencies]
-proc-macro2 = "0.4.27"
+proc-macro2 = "1.0.6"
 
 # Reminder: add 'extra-traits' feature for Debug derive
-syn = { version = "0.15.32", features = ["full"] }
+syn = { version = "1.0.5", features = ["full"] }
 
-quote = "0.6"
+quote = "1.0.2"
