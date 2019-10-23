@@ -85,3 +85,35 @@ fn ignored_field(field: &Field, field_ignore_attr_ident: &Ident) -> bool {
         }
     })
 }
+
+#[proc_macro_derive(ToOneHot)]
+pub fn derive_to_one_hot(input: TokenStream) -> TokenStream {
+    let input = parse_macro_input!(input as ItemEnum);
+
+    let name = &input.ident;
+
+    let variants_idents: Vec<Ident> = input.variants.into_iter().map(|v| v.ident.clone()).collect();
+
+    let variants_idents_lower: Vec<Ident> = variants_idents
+        .iter()
+        .map(|v| format_ident!("{}", v.to_string().to_lowercase()))
+        .collect();
+
+    let new_struct_ident = format_ident!("{}OneHot", name);
+
+    let output = quote! {
+        struct #new_struct_ident {
+            #(#variants_idents_lower: f32),*
+        }
+
+        impl #name {
+            pub fn to_one_hot(&self) -> #new_struct_ident {
+                #new_struct_ident {
+                    #(#variants_idents_lower: if *self == #name::#variants_idents { 1. } else { 0. }),*
+                }
+            }
+        }
+    };
+
+    TokenStream::from(output)
+}
