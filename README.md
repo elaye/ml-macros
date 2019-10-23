@@ -57,7 +57,9 @@ and a method `Test::to_one_hot(&self) -> TestOneHot` so that:
 
 ```rust
 Test::Foo.to_one_hot() == TestOneHot { foo: 1., bar: 0. }
-Test::Bar.to_one_hot() == TestOneHot { foo: 0., bar: 1. }
+Test::Foo.to_one_hot() == TestOneHot { foo: 1., bar: 0. }
 ```
+
+The field names of the struct are converted to snake case i.e. `FooBar` would become `foo_bar`.
 
 *Caveat*: this only works with simple variants

@@ -16,6 +16,7 @@ use syn::{
     Ident,
     Meta,
 };
+use heck::SnakeCase;
 
 const NO_FEATURE_IDENT: &'static str = "no_feature";
 
@@ -98,7 +99,7 @@ pub fn derive_to_one_hot(input: TokenStream) -> TokenStream {
 
     let variants_idents_lower: Vec<Ident> = variants_idents
         .iter()
-        .map(|v| format_ident!("{}", v.to_string().to_lowercase()))
+        .map(|v| format_ident!("{}", v.to_string().to_snake_case()))
         .collect();
 
     let new_struct_ident = format_ident!("{}OneHot", name);
