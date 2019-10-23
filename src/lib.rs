@@ -104,8 +104,8 @@ pub fn derive_to_one_hot(input: TokenStream) -> TokenStream {
     let new_struct_ident = format_ident!("{}OneHot", name);
 
     let output = quote! {
-        struct #new_struct_ident {
-            #(#variants_idents_lower: f32),*
+        pub struct #new_struct_ident {
+            #(pub #variants_idents_lower: f32),*
         }
 
         impl #name {
