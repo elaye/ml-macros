@@ -73,15 +73,17 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
 }
 
 fn ignored_field(field: &Field, field_ignore_attr_ident: &Ident) -> bool {
+    // If all attributes are different from
+    // 'field_ignore_attr_ident', then return 'true'.
     field.attrs.iter().all(|attr| {
         match attr.parse_meta() {
             Ok(Meta::Path(path)) => {
                 match path.get_ident() {
-                    Some(ident) => ident == field_ignore_attr_ident,
+                    Some(ident) => ident != field_ignore_attr_ident,
                     None => false
                 }
             },
-            _ => true
+            _ => false
         }
     })
 }
