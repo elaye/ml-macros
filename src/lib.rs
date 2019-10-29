@@ -70,7 +70,15 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
             }
         }
 
-        struct #vec_name<T>(Vec<T>);
+        pub struct #vec_name<T>(Vec<T>);
+
+        impl<T> Deref for #vec_name<T> {
+            type Target = Vec<T>;
+
+            fn deref(&self) -> &Self::Target {
+                &self.0
+            }
+        }
 
         impl #vec_name<#name> {
             pub fn new(features: Vec<#name>) -> #vec_name<#name> {
