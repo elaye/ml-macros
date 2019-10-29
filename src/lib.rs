@@ -25,6 +25,7 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as ItemStruct);
 
     let name = &input.ident;
+    let vec_name = format_ident!("{}Vec", name);
 
     let no_feature_ident = Ident::new(NO_FEATURE_IDENT, Span::call_site());
 
@@ -67,6 +68,18 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
             pub const fn nb_features() -> usize {
                 #nb_features
             }
+        }
+
+        struct #vec_name<T>(Vec<T>);
+
+        impl #vec_name<#name> {
+            pub fn new(features: Vec<#name>) -> #vec_name<#name> {
+                #vec_name(features)
+            }
+
+            #(pub fn #feature_fields_idents(&self) -> Vec<f32> {
+                self.0.iter().map(|f| f.#feature_fields_idents).collect()
+            })*
         }
     };
 

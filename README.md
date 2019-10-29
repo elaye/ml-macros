@@ -1,4 +1,4 @@
-This crate aims to be a collection of helper macros for machine learning.
+This crate aims to be a collection of helper macros for the management of named features used for machine learning.
 
 ## `#[derive(Features)]` proc macro derive
 
@@ -21,12 +21,15 @@ struct MyFeatures {
 will produce this:
 
 ```rust
-impl Features {
+impl MyFeatures {
   pub fn to_vec(&self) -> Vec<f32> {
     vec![self.foo, self.bar]
   }
 }
 ```
+
+It will also produce a `MyFeaturesVec` struct which is essentially a wrapper around a `Vec<MyFeatures>` that adds methods to get features columns.
+In the case of `MyFeatures`, the methods `MyFeatures::foo(&self) -> Vec<f32>` and `MyFeatures::bar(&self) -> Vec<f32>` will be generated.
 
 *Caveat*: only `f32` fields are accepted as features at the moment
 
@@ -57,7 +60,7 @@ and a method `Test::to_one_hot(&self) -> TestOneHot` so that:
 
 ```rust
 Test::Foo.to_one_hot() == TestOneHot { foo: 1., bar: 0. }
-Test::Foo.to_one_hot() == TestOneHot { foo: 1., bar: 0. }
+Test::Bar.to_one_hot() == TestOneHot { foo: 0., bar: 1. }
 ```
 
 The field names of the struct are converted to snake case i.e. `FooBar` would become `foo_bar`.

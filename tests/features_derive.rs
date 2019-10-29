@@ -40,4 +40,15 @@ mod test {
     fn names() {
         assert_eq!(Test::names(), vec!["foo", "bar"]);
     }
+
+    #[test]
+    fn features_vec() {
+        let vs = TestVec::new(vec![
+            Test { id: 0, foo: 0.5, bar: 0.3 },
+            Test { id: 1, foo: 0.7, bar: 0.1 },
+        ]);
+
+        assert_eq!(vs.foo(), vec![0.5, 0.7]);
+        assert_eq!(vs.bar(), vec![0.3, 0.1]);
+    }
 }
