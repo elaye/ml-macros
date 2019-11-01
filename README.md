@@ -28,8 +28,9 @@ impl MyFeatures {
 }
 ```
 
-It will also produce a `MyFeaturesVec` struct which is essentially a wrapper around a `Vec<MyFeatures>` that adds methods to get features columns.
-In the case of `MyFeatures`, the methods `MyFeatures::foo(&self) -> Vec<f32>` and `MyFeatures::bar(&self) -> Vec<f32>` will be generated.
+It will also produce a `MyFeaturesColView` trait which allows to get a column from a vector of features.
+
+In the case of `MyFeatures`, this trait will provide the methods `MyFeaturesColView::foo(&self) -> Vec<f32>` and `MyFeaturesColView::bar(&self) -> Vec<f32>`. To use the trait methods, just import the trait in scope.
 
 *Caveat*: only `f32` fields are accepted as features at the moment
 

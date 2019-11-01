@@ -25,7 +25,7 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as ItemStruct);
 
     let name = &input.ident;
-    let vec_name = format_ident!("{}Vec", name);
+    let trait_name = format_ident!("{}ColView", name);
 
     let no_feature_ident = Ident::new(NO_FEATURE_IDENT, Span::call_site());
 
@@ -70,23 +70,19 @@ pub fn derive_features(input: TokenStream) -> TokenStream {
             }
         }
 
-        pub struct #vec_name(Vec<#name>);
-
-        impl Deref for #vec_name {
-            type Target = Vec<#name>;
-
-            fn deref(&self) -> &Self::Target {
-                &self.0
-            }
+        pub trait #trait_name {
+            #(fn #feature_fields_idents(&self) -> Vec<f32>;)*
         }
 
-        impl #vec_name {
-            pub fn new(features: Vec<#name>) -> #vec_name {
-                #vec_name(features)
-            }
+        impl #trait_name for Vec<#name> {
+            #(fn #feature_fields_idents(&self) -> Vec<f32> {
+                self.iter().map(|f| f.#feature_fields_idents).collect()
+            })*
+        }
 
-            #(pub fn #feature_fields_idents(&self) -> Vec<f32> {
-                self.0.iter().map(|f| f.#feature_fields_idents).collect()
+        impl #trait_name for &[#name] {
+            #(fn #feature_fields_idents(&self) -> Vec<f32> {
+                self.iter().map(|f| f.#feature_fields_idents).collect()
             })*
         }
     };
