@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod test {
-    use ml_macros::*;
+    use ml_features::*;
 
     #[derive(Features)]
     #[allow(dead_code)]
@@ -43,10 +43,10 @@ mod test {
 
     #[test]
     fn features_vec() {
-        let vs = TestVec::new(vec![
+        let vs = vec![
             Test { id: 0, foo: 0.5, bar: 0.3 },
             Test { id: 1, foo: 0.7, bar: 0.1 },
-        ]);
+        ];
 
         assert_eq!(vs.foo(), vec![0.5, 0.7]);
         assert_eq!(vs.bar(), vec![0.3, 0.1]);

@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod test {
-    use ml_macros::*;
+    use ml_features::*;
 
     #[derive(PartialEq, ToOneHot)]
     enum Test {

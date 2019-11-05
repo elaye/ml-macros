@@ -1,18 +1,11 @@
 [package]
-name = "ml-macros"
+name = "ml-features"
 version = "0.1.0"
 authors = ["Elie Génard <elie.genard@laposte.net>"]
 edition = "2018"
 
-[lib]
-proc-macro = true
-
 [dependencies]
-proc-macro2 = "1.0.0"
+ml-features-derive = { version = "0.1.0", path = "ml-features-derive" }
 
-# Reminder: add 'extra-traits' feature for Debug derive
-syn = { version = "1.0.5", features = ["full"] }
-
-quote = "1.0.2"
-
-heck = "0.3.1"
+[workspace]
+members = ["ml-features-derive"]
