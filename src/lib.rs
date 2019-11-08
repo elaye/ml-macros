@@ -1,5 +1,5 @@
 mod features;
 
-pub use ml_features_derive::{Features, ToOneHot};
+pub use ml_features_derive::Features;
 
-pub use features::{Features, ToOneHot};
+pub use features::Features;

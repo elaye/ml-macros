@@ -2,7 +2,7 @@
 mod test {
     use ml_features::*;
 
-    #[derive(PartialEq, ToOneHot)]
+    #[derive(PartialEq, Features)]
     enum Test {
         Foo,
         Bar,
@@ -11,20 +11,12 @@ mod test {
 
     #[test]
     fn to_one_hot() {
-        let a: TestOneHot = Test::Foo.to_one_hot();
-        let b: TestOneHot = Test::Bar.to_one_hot();
-        let c: TestOneHot = Test::FooBar.to_one_hot();
+        let a: Vec<f32> = Test::Foo.to_vec();
+        let b: Vec<f32> = Test::Bar.to_vec();
+        let c: Vec<f32> = Test::FooBar.to_vec();
 
-        assert_eq!(a.foo, 1.);
-        assert_eq!(a.bar, 0.);
-        assert_eq!(a.foo_bar, 0.);
-
-        assert_eq!(b.foo, 0.);
-        assert_eq!(b.bar, 1.);
-        assert_eq!(b.foo_bar, 0.);
-
-        assert_eq!(c.foo, 0.);
-        assert_eq!(c.bar, 0.);
-        assert_eq!(c.foo_bar, 1.);
+        assert_eq!(a, vec![1., 0., 0.]);
+        assert_eq!(b, vec![0., 1., 0.]);
+        assert_eq!(c, vec![0., 0., 1.]);
     }
 }
